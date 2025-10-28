@@ -1,0 +1,48 @@
+<h1>予約フォーム</h1>
+
+<%= form_with model: @reservation, local: true do |form| %>
+  <% if @reservation.errors.any? %>
+    <div class="error-messages">
+      <h2>以下のエラーがあります：</h2>
+      <ul>
+        <% @reservation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :email, "メールアドレス" %>
+    <%= form.email_field :email, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name, "お名前" %>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date, "予約日" %>
+    <%= form.date_field :date, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :time, "予約時間" %>
+    <%= form.time_field :time, required: true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :preferred_staff, "希望担当者" %>
+    <%= form.text_field :preferred_staff %>
+  </div>
+
+  <div class="field">
+    <%= form.label :purchase_intention, "購入予定" %>
+    <%= form.check_box :purchase_intention %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "予約する" %>
+  </div>
+<% end %>
