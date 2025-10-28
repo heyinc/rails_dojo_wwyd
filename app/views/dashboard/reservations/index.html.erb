@@ -1,0 +1,32 @@
+<h1>予約一覧</h1>
+
+<% if @reservations.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>メールアドレス</th>
+        <th>お名前</th>
+        <th>予約日</th>
+        <th>予約時間</th>
+        <th>希望担当者</th>
+        <th>購入予定</th>
+        <th>予約日時</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td><%= reservation.email %></td>
+          <td><%= reservation.name %></td>
+          <td><%= reservation.date.strftime("%Y年%m月%d日") %></td>
+          <td><%= reservation.time.strftime("%H:%M") %></td>
+          <td><%= reservation.preferred_staff.present? ? reservation.preferred_staff : "-" %></td>
+          <td><%= reservation.purchase_intention? ? "あり" : "なし" %></td>
+          <td><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>予約がありません。</p>
+<% end %>
