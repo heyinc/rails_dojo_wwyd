@@ -11,6 +11,7 @@
         <th>希望担当者</th>
         <th>購入予定</th>
         <th>予約日時</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +24,7 @@
           <td><%= reservation.preferred_staff.present? ? reservation.preferred_staff : "-" %></td>
           <td><%= reservation.purchase_intention? ? "あり" : "なし" %></td>
           <td><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+          <td><%= link_to "詳細", dashboard_reservation_path(reservation), class: "button" %></td>
         </tr>
       <% end %>
     </tbody>

@@ -1,0 +1,30 @@
+<h1>予約詳細</h1>
+
+<div class="reservation-details">
+  <dl>
+    <dt>メールアドレス</dt>
+    <dd><%= @reservation.email %></dd>
+
+    <dt>お名前</dt>
+    <dd><%= @reservation.name %></dd>
+
+    <dt>予約日</dt>
+    <dd><%= @reservation.date.strftime("%Y年%m月%d日") %></dd>
+
+    <dt>予約時間</dt>
+    <dd><%= @reservation.time.strftime("%H:%M") %></dd>
+
+    <dt>希望担当者</dt>
+    <dd><%= @reservation.preferred_staff.present? ? @reservation.preferred_staff : "-" %></dd>
+
+    <dt>購入予定</dt>
+    <dd><%= @reservation.purchase_intention? ? "あり" : "なし" %></dd>
+
+    <dt>予約日時</dt>
+    <dd><%= @reservation.created_at.strftime("%Y年%m月%d日 %H:%M") %></dd>
+  </dl>
+</div>
+
+<div class="actions">
+  <%= link_to "予約一覧に戻る", dashboard_reservations_path, class: "button" %>
+</div>

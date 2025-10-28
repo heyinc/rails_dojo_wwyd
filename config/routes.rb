@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :reservations, only: [ :new, :create ]
 
   namespace :dashboard do
-    resources :reservations, only: [ :index ]
+    resources :reservations, only: [ :index, :show ]
   end
 
   resource :session
