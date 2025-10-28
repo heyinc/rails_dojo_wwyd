@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_28_021140) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_28_024856) do
+  create_table "reservations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date"
+    t.string "email"
+    t.string "name"
+    t.string "preferred_staff"
+    t.boolean "purchase_intention"
+    t.time "time"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  name: MyString
+  date: 2025-10-28
+  time: 2025-10-28 11:48:56
+  preferred_staff: MyString
+  purchase_intention: false
+
+two:
+  email: MyString
+  name: MyString
+  date: 2025-10-28
+  time: 2025-10-28 11:48:56
+  preferred_staff: MyString
+  purchase_intention: false
