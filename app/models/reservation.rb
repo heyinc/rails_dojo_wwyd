@@ -1,4 +1,6 @@
 class Reservation < ApplicationRecord
+  has_one :order, dependent: :destroy
+
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
   validates :date, presence: true

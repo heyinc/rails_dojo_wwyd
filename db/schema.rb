@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_28_024856) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_29_021505) do
+  create_table "orders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "name"
+    t.string "product"
+    t.integer "reservation_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["reservation_id"], name: "index_orders_on_reservation_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "reservations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -39,5 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_024856) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "orders", "reservations"
+  add_foreign_key "orders", "users"
   add_foreign_key "sessions", "users"
 end
