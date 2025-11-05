@@ -8,6 +8,21 @@ User.find_or_create_by!(email_address: "test@example.com") do |user|
   user.password_confirmation = "password"
 end
 
+# Itemデータを作成
+items = [
+  { name: "商品A", stock: 10 },
+  { name: "商品B", stock: 5 },
+  { name: "商品C", stock: 20 },
+  { name: "商品D", stock: 15 },
+  { name: "商品E", stock: 8 }
+]
+
+items.each do |item_data|
+  Item.find_or_create_by!(name: item_data[:name]) do |item|
+    item.stock = item_data[:stock]
+  end
+end
+
 sample_reservations = [
   {
     email: "customer1@example.com",

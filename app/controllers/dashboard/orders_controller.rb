@@ -1,6 +1,6 @@
 class Dashboard::OrdersController < ApplicationController
   def index
-    @orders = Order.order(created_at: :desc)
+    @orders = Order.includes(:item, :reservation, :user).order(created_at: :desc)
   end
 
   def new
@@ -11,5 +11,6 @@ class Dashboard::OrdersController < ApplicationController
       name: reservation.name,
       user: Current.user
     )
+    @items = Item.all.order(:name)
   end
 end

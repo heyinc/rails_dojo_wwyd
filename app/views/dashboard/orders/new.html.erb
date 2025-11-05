@@ -34,8 +34,8 @@
   <%= form.hidden_field :name %>
 
   <div class="field">
-    <%= form.label :product, "購入商品" %>
-    <%= form.text_field :product, required: true, placeholder: "例: 商品A、商品B" %>
+    <%= form.label :item_id, "購入商品" %>
+    <%= form.collection_select :item_id, @items, :id, :name, { prompt: "商品を選択してください" }, { required: true } %>
   </div>
 
   <div class="field">
