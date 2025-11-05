@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_05_113048) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_05_115225) do
   create_table "items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -30,6 +30,15 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_05_113048) do
     t.index ["item_id"], name: "index_orders_on_item_id"
     t.index ["reservation_id"], name: "index_orders_on_reservation_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.datetime "created_at", null: false
+    t.integer "order_id", null: false
+    t.string "payment_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payments_on_order_id"
   end
 
   create_table "reservations", force: :cascade do |t|
@@ -64,5 +73,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_05_113048) do
   add_foreign_key "orders", "items"
   add_foreign_key "orders", "reservations"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
   add_foreign_key "sessions", "users"
 end
