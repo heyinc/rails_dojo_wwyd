@@ -1,2 +1,38 @@
-<h1>Dashboard::Orders#index</h1>
-<p>Find me in app/views/dashboard/orders/index.html.erb</p>
+<h1>注文一覧</h1>
+
+<% if @orders.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>予約ID</th>
+        <th>お客様名</th>
+        <th>メールアドレス</th>
+        <th>購入商品</th>
+        <th>担当者</th>
+        <th>注文日時</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td><%= order.reservation_id %></td>
+          <td><%= order.name %></td>
+          <td><%= order.email %></td>
+          <td><%= order.product %></td>
+          <td><%= order.user.email_address %></td>
+          <td><%= order.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+          <td>
+            <%= link_to "予約詳細", dashboard_reservation_path(order.reservation), class: "button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>注文がありません。</p>
+<% end %>
+
+<div class="actions">
+  <%= link_to "予約一覧", dashboard_reservations_path, class: "button" %>
+</div>

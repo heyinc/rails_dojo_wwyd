@@ -1,2 +1,50 @@
-<h1>Dashboard::Orders#new</h1>
-<p>Find me in app/views/dashboard/orders/new.html.erb</p>
+<h1>注文作成</h1>
+
+<h2>予約情報</h2>
+<div class="reservation-info">
+  <dl>
+    <dt>予約ID</dt>
+    <dd><%= @order.reservation.id %></dd>
+    <dt>お客様名</dt>
+    <dd><%= @order.name %></dd>
+    <dt>メールアドレス</dt>
+    <dd><%= @order.email %></dd>
+    <dt>予約日</dt>
+    <dd><%= @order.reservation.date.strftime("%Y年%m月%d日") %></dd>
+    <dt>予約時間</dt>
+    <dd><%= @order.reservation.time.strftime("%H:%M") %></dd>
+  </dl>
+</div>
+
+<h2>注文情報</h2>
+<%= form_with model: [:dashboard, @order], local: true do |form| %>
+  <% if @order.errors.any? %>
+    <div class="error-messages">
+      <h3>以下のエラーがあります：</h3>
+      <ul>
+        <% @order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :reservation_id %>
+  <%= form.hidden_field :email %>
+  <%= form.hidden_field :name %>
+
+  <div class="field">
+    <%= form.label :product, "購入商品" %>
+    <%= form.text_field :product, required: true, placeholder: "例: 商品A、商品B" %>
+  </div>
+
+  <div class="field">
+    <label>担当者</label>
+    <p><%= Current.user.email_address %></p>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "注文を登録" %>
+    <%= link_to "キャンセル", dashboard_reservation_path(@order.reservation), class: "button" %>
+  </div>
+<% end %>

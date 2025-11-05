@@ -27,4 +27,10 @@
 
 <div class="actions">
   <%= link_to "予約一覧に戻る", dashboard_reservations_path, class: "button" %>
+  <% unless @reservation.order %>
+    <%= link_to "注文作成", new_dashboard_order_path(reservation_id: @reservation.id), class: "button primary" %>
+  <% else %>
+    <p>この予約は既に注文済みです。</p>
+    <%= link_to "注文詳細", dashboard_orders_path, class: "button" %>
+  <% end %>
 </div>
