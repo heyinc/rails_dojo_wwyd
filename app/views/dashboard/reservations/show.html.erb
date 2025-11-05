@@ -20,6 +20,9 @@
     <dt>購入予定</dt>
     <dd><%= @reservation.purchase_intention? ? "あり" : "なし" %></dd>
 
+    <dt>ステータス</dt>
+    <dd><%= @reservation.status == "completed" ? "注文済み" : "予約済み" %></dd>
+
     <dt>予約日時</dt>
     <dd><%= @reservation.created_at.strftime("%Y年%m月%d日 %H:%M") %></dd>
   </dl>
@@ -27,7 +30,7 @@
 
 <div class="actions">
   <%= link_to "予約一覧に戻る", dashboard_reservations_path, class: "button" %>
-  <% unless @reservation.order %>
+  <% if @reservation.pending? %>
     <%= link_to "注文作成", new_dashboard_order_path(reservation_id: @reservation.id), class: "button primary" %>
   <% else %>
     <p>この予約は既に注文済みです。</p>

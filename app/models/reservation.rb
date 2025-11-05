@@ -1,10 +1,13 @@
 class Reservation < ApplicationRecord
   has_one :order, dependent: :destroy
 
+  enum status: { pending: "pending", completed: "completed" }
+
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
   validates :date, presence: true
   validates :time, presence: true
+  validates :status, presence: true
 
   validate :date_must_be_future
 
