@@ -1,11 +1,11 @@
 User.find_or_create_by!(email_address: "admin@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "railsdojo20251126"
+  user.password_confirmation = "railsdojo20251126"
 end
 
 User.find_or_create_by!(email_address: "test@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
+  user.password = "railsdojo20251126"
+  user.password_confirmation = "railsdojo20251126"
 end
 
 # Itemデータを作成
