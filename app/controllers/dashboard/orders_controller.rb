@@ -12,5 +12,6 @@ class Dashboard::OrdersController < ApplicationController
       user: Current.user
     )
     @items = Item.all.order(:name)
+    @users = User.all.order(:name)
   end
 end

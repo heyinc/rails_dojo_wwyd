@@ -1,5 +1,11 @@
 <h1>予約フォーム</h1>
 
+<% if flash[:alert] %>
+  <div class="error-messages">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
 <%= form_with model: @reservation, local: true do |form| %>
   <% if @reservation.errors.any? %>
     <div class="error-messages">
@@ -33,8 +39,8 @@
   </div>
 
   <div class="field">
-    <%= form.label :preferred_staff, "希望担当者" %>
-    <%= form.text_field :preferred_staff %>
+    <%= form.label :preferred_staff_user_id, "希望担当者" %>
+    <%= form.collection_select :preferred_staff_user_id, @users, :id, :name, { prompt: "選択してください（任意）" }, {} %>
   </div>
 
   <div class="field">

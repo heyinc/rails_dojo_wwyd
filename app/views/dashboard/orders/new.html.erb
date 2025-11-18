@@ -18,17 +18,6 @@
 
 <h2>注文情報</h2>
 <%= form_with model: [:dashboard, @order], local: true do |form| %>
-  <% if @order.errors.any? %>
-    <div class="error-messages">
-      <h3>以下のエラーがあります：</h3>
-      <ul>
-        <% @order.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <%= form.hidden_field :reservation_id %>
   <%= form.hidden_field :email %>
   <%= form.hidden_field :name %>
@@ -39,12 +28,11 @@
   </div>
 
   <div class="field">
-    <label>担当者</label>
-    <p><%= Current.user.email_address %></p>
+    <%= form.label :user_id, "担当者" %>
+    <%= form.collection_select :user_id, @users, :id, :name, { selected: Current.user.id, prompt: "担当者を選択してください" }, { required: true } %>
   </div>
 
   <div class="actions">
     <%= form.submit "注文を登録" %>
-    <%= link_to "キャンセル", dashboard_reservation_path(@order.reservation), class: "button" %>
   </div>
 <% end %>
