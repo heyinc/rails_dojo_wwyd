@@ -32,6 +32,15 @@
     <%= form.collection_select :user_id, @users, :id, :name, { selected: Current.user.id, prompt: "担当者を選択してください" }, { required: true } %>
   </div>
 
+  <h3>カード情報</h3>
+  <div class="field">
+    <%= form.label :card_number, "カード番号" %>
+    <%= form.text_field :card_number %>
+    <small>※クレカ情報非通過の実装を模したもので、何の値を入力しても適当な乱数をサーバーにリクエストします。</small>
+  </div>
+
+  <%= form.hidden_field :token, value: SecureRandom.alphanumeric(32) %>
+
   <div class="actions">
     <%= form.submit "注文を登録" %>
   </div>
