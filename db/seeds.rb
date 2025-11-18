@@ -1,9 +1,23 @@
 User.find_or_create_by!(email_address: "admin@example.com") do |user|
+  user.name = "山田太郎"
   user.password = "railsdojo20251126"
   user.password_confirmation = "railsdojo20251126"
 end
 
 User.find_or_create_by!(email_address: "test@example.com") do |user|
+  user.name = "田中花子"
+  user.password = "railsdojo20251126"
+  user.password_confirmation = "railsdojo20251126"
+end
+
+User.find_or_create_by!(email_address: "sato@example.com") do |user|
+  user.name = "佐藤次郎"
+  user.password = "railsdojo20251126"
+  user.password_confirmation = "railsdojo20251126"
+end
+
+User.find_or_create_by!(email_address: "suzuki@example.com") do |user|
+  user.name = "鈴木三郎"
   user.password = "railsdojo20251126"
   user.password_confirmation = "railsdojo20251126"
 end

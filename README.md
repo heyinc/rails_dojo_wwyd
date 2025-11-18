@@ -72,8 +72,10 @@ bundle install
 
 シードデータで以下のユーザーが作成されます：
 
-- **管理者**: `admin@example.com` / `password`
-- **テストユーザー**: `test@example.com` / `password`
+- **山田太郎**: `admin@example.com` / `railsdojo20251126`
+- **田中花子**: `test@example.com` / `railsdojo20251126`
+- **佐藤次郎**: `sato@example.com` / `railsdojo20251126`
+- **鈴木三郎**: `suzuki@example.com` / `railsdojo20251126`
 
 ## 動作確認手順
 
