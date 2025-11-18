@@ -1,24 +1,92 @@
-# README
+# マスタリーのためのRails道場 "What Would You Do?"
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+このリポジトリは STORES Tech Conf で行われるRails道場というイベント用のものです。
+課題に対してRailsを使ってどのように解決するか、考えてみてください。
 
-Things you may want to cover:
+## 概要
 
-* Ruby version
+このRailsアプリケーションは、お店の来店予約管理と注文管理を行うシステムです。
+顧客はログイン不要で予約でき、従業員はログインして予約管理・注文処理・決済を行えます。
 
-* System dependencies
+## 主な機能
 
-* Configuration
+### 顧客向け機能（認証不要）
+- 来店予約の作成
+  - メールアドレス、名前、予約日時、希望担当者、購入予定の入力
 
-* Database creation
+### 従業員向け機能（認証必須）
+- 予約一覧・詳細の閲覧
+- 注文情報の作成
+- 決済処理の実行
 
-* Database initialization
+## 環境構築
 
-* How to run the test suite
+```bash
+git clone <repository-url>
+cd rails_dojo_wwyd
 
-* Services (job queues, cache servers, search engines, etc.)
+bundle install
 
-* Deployment instructions
+./bin/rails db:migrate
+./bin/rails db:seed
 
-* ...
+./bin/rails server
+```
+
+## 課題
+
+### 課題1: 注文情報の作成と決済処理
+
+注文情報の作成と決済を行う機能を実装してください。
+
+- [ ] 注文作成フォームの実装（`Dashboard::OrdersController#create`）
+- [ ] 決済APIクライアント（`PaymentApiClient`）の呼び出し
+- [ ] Paymentレコードの作成
+- [ ] 注文作成時の予約ステータス更新（`pending` → `completed`）
+- [ ] 指定されたアイテムの在庫数を減らす
+- [ ] エラーハンドリング（決済失敗時の処理）
+
+
+### 課題2: 予約情報の検索機能
+
+予約管理を行うにあたって、予約情報の検索機能が必要です。以下の機能を実装してください。
+
+- [ ] 予約一覧ページに検索フォームを追加
+- [ ] メールアドレスでの検索
+- [ ] 名前での検索
+- [ ] 予約日での検索
+- [ ] ステータス（予約済み/注文済み）での絞り込み
+- [ ] 検索結果の一覧表示
+
+### 課題3: 自由課題
+
+このアプリケーションをもっと良くするために、思いついた改善点があれば何でも取り組んでください。
+
+## 開発のヒント
+
+- 認証必須の機能は `Dashboard::` ネームスペース配下で実装されています
+- 決済APIは `PaymentApiClient` クラスでダミー実装されています
+
+## ログイン情報
+
+シードデータで以下のユーザーが作成されます：
+
+- **管理者**: `admin@example.com` / `password`
+- **テストユーザー**: `test@example.com` / `password`
+
+## 動作確認手順
+
+### 1. 予約作成（認証不要）
+1. ブラウザで `http://localhost:3000` にアクセス
+2. 予約フォームに必要事項を入力して送信
+3. 予約完了メッセージが表示されることを確認
+
+### 2. 予約管理（認証必須）
+1. `http://localhost:3000/session/new` でログイン
+2. `http://localhost:3000/dashboard/reservations` で予約一覧を確認
+3. 予約詳細ページで注文作成ボタンを確認
+
+## 注意事項
+
+- このアプリケーションはワークショップ用のため、本番環境での使用は想定していません
+- 決済APIはダミー実装のため、実際の決済処理は行われません
