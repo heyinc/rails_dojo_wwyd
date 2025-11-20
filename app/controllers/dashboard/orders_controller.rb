@@ -14,4 +14,8 @@ class Dashboard::OrdersController < ApplicationController
     @items = Item.all.order(:name)
     @users = User.all.order(:name)
   end
+
+  def create
+    # Write Code Here
+  end
 end
