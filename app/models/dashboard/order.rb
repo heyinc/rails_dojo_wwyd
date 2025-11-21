@@ -9,6 +9,10 @@ class Dashboard::Order < ::Order
   before_validation :to_completed_status
   before_validation :decrease_stock
   after_save :create_payment
+  after_save do
+    reservation.save!
+    item.save!
+  end
 
   private
 
