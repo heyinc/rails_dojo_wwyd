@@ -16,8 +16,8 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
-    @order = Order.new(order_params)
+    reservation = Reservation.find(params.expect(order: :reservation_id)[:reservation_id])
+    @order = reservation.build_order.becomes(Dashboard::Order)
 
     if @order.save
       redirect_to dashboard_orders_path, notice: "Order was successfully created."
@@ -29,8 +29,6 @@ class Dashboard::OrdersController < ApplicationController
   private
 
   def order_params
-    # TODO: 後でトークンを足す
-    # params.expect(order: %i[reservation_id email name item_id user_id token])
-    params.expect(order: %i[reservation_id email name item_id user_id])
+    params.expect(order: %i[email name item_id user_id token])
   end
 end
