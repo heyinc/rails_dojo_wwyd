@@ -22,6 +22,8 @@ class Dashboard::OrdersController < ApplicationController
     if @order.save
       redirect_to dashboard_orders_path, notice: "Order was successfully created."
     else
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
