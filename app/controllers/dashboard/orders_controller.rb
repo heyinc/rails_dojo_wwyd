@@ -18,6 +18,7 @@ class Dashboard::OrdersController < ApplicationController
   def create
     reservation = Reservation.find(params.expect(order: :reservation_id)[:reservation_id])
     @order = reservation.build_order.becomes(Dashboard::Order)
+    @order.assign_attributes(order_params)
 
     if @order.save
       redirect_to dashboard_orders_path, notice: "Order was successfully created."
