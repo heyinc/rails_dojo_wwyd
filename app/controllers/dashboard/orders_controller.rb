@@ -16,6 +16,21 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
+    reservation = Reservation.find(params.expect(order: :reservation_id)[:reservation_id])
+    @order = Dashboard::Order.new(reservation, order_params)
+
+    if @order.save
+      redirect_to dashboard_orders_path, notice: "Order was successfully created."
+    else
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def order_params
+    params.expect(order: %i[email name item_id user_id token])
   end
 end
