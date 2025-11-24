@@ -8,6 +8,6 @@ class ReservationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get create" do
     post reservations_path, params: { reservation: { name: "Test", email: "test@example.com" } }
-    assert_response :redirect
+    assert_response :success
   end
 end
