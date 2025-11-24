@@ -5,75 +5,77 @@
 このRailsアプリケーションは、お店の来店予約管理と注文管理を行うシステムです。
 顧客はログイン不要で予約でき、従業員はログインして予約管理・注文処理・決済を行えます。
 
-## 主な機能
-
-### 顧客向け機能（認証不要）
-- 来店予約の作成
-  - メールアドレス、名前、予約日時、希望担当者、購入予定の入力
-
-### 従業員向け機能（認証必須）
-- 予約一覧・詳細の閲覧
-- 注文情報の作成
-- 決済処理の実行
-
 ## 環境構築
 
 ```bash
 git clone <repository-url>
 cd rails_dojo_wwyd
 
-bundle install
-
-./bin/rails db:migrate
-./bin/rails db:seed
-
+./bin/setup --skip-server
 ./bin/rails server
 ```
+
+## アプリケーションの説明（動作確認方法）
+
+### 来店予約機能
+http://127.0.0.1:3000/
+
+- ログイン不要
+- フォームを入力して予約を作成できます
+
+
+### 予約一覧・詳細機能
+http://127.0.0.1:3000/dashboard/reservations
+
+- ログインが必要（README:ログイン情報参照）
+- 来店予約機能で作成された予約情報と、開発用のseedデータを確認できます
+- 予約詳細ページから注文作成ページに遷移できます
+
+### 注文作成・一覧
+http://localhost:3000/dashboard/orders
+
+- 予約情報を元に注文を作成できます
+- 注文の作成自体は課題1となっているのでまだ動作しません
 
 ## 課題
 
 ### 課題1: 注文情報の作成と決済処理
 
-注文情報の作成と決済を行う機能を実装してください。
+注文情報の作成と決済を行う機能を `Dashboard::OrdersController#create` に実装してください。
 
-- [ ] 決済APIクライアント（`PaymentApiClient`）の呼び出し
-- [ ] Paymentレコードの作成
-- [ ] 注文作成時の予約ステータス更新（`pending` → `completed`）
-- [ ] 指定されたアイテムの在庫数を減らす
-- [ ] 在庫が存在しなければエラーとする
-- [ ] エラーハンドリング
+- [ ] Orderレコードの作成
+    - `Reservation has_one Order` の関係であることに注意してください
+    - `Order#email` には指定された `Reservation#email` を保持させてください
+    - `Order#name` には指定された `Item#name` を保持させてください
+- [ ] 決済APIクライアント（`PaymentApiClient.execute`）を呼び出し、Paymentレコードの作成
+    - `Order has_one Payment` の関係であることに注意してください
+    - `PaymentApiClient.execute` の引数 `token` にはリクエストパラメータ `params[:order][:token]` を指定してください
+    - `PaymentApiClient.execute` の引数 `amount` には指定された商品の価格 `Item#price` を指定してください
+- [ ] 予約ステータス（`Reservation#status`）を `pending` から `completed` に更新
+    - すでに `completed` である場合はエラーとしてください
+- [ ] 指定されたアイテムの在庫数（`Item#stock`）を1減らす
+    - 在庫が存在しなければエラーとしてください
+- [ ] エラーが発生した場合はその情報をインスタンス変数 `@errors` にArrayで保持し、画面に表示できるようにする
 
 ### 課題2: 自由課題
 
 このアプリケーションをもっと良くするために、思いついた改善点があれば何でも取り組んでください。
 
-## 開発のヒント
+## 備考
 
-- 認証必須の機能は `Dashboard::` ネームスペース配下で実装されています
+- UserとItemはseedからのみ生成されます
 - 決済APIは `PaymentApiClient` クラスでダミー実装されています
+    - 実際の決済処理は行われません
 
 ## ログイン情報
 
-シードデータで以下のユーザーが作成されます：
+seedで以下のユーザーが作成されます：
 
 - **山田太郎**: `admin@example.com` / `railsdojo20251126`
 - **田中花子**: `test@example.com` / `railsdojo20251126`
 - **佐藤次郎**: `sato@example.com` / `railsdojo20251126`
 - **鈴木三郎**: `suzuki@example.com` / `railsdojo20251126`
 
-## 動作確認手順
-
-### 1. 予約作成（認証不要）
-1. ブラウザで `http://localhost:3000` にアクセス
-2. 予約フォームに必要事項を入力して送信
-3. 予約完了メッセージが表示されることを確認
-
-### 2. 予約管理（認証必須）
-1. `http://localhost:3000/session/new` でログイン
-2. `http://localhost:3000/dashboard/reservations` で予約一覧を確認
-3. 予約詳細ページで注文作成ボタンを確認
-
 ## 注意事項
 
 - このアプリケーションはワークショップ用のため、本番環境での使用は想定していません
-- 決済APIはダミー実装のため、実際の決済処理は行われません
