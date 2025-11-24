@@ -6,18 +6,7 @@
   </div>
 <% end %>
 
-<%= form_with model: @reservation, local: true do |form| %>
-  <% if @reservation.errors.any? %>
-    <div class="error-messages">
-      <h2>以下のエラーがあります：</h2>
-      <ul>
-        <% @reservation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_with model: @reservation, data: { turbo: false } do |form| %>
   <div class="field">
     <%= form.label :email, "メールアドレス" %>
     <%= form.email_field :email, required: true %>
