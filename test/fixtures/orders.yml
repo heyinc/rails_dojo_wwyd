@@ -4,12 +4,10 @@ one:
   reservation: one
   email: MyString
   name: MyString
-  product: MyString
   user: one
 
 two:
   reservation: two
   email: MyString
   name: MyString
-  product: MyString
   user: two
