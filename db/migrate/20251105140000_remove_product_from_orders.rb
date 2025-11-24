@@ -3,4 +3,3 @@ class RemoveProductFromOrders < ActiveRecord::Migration[8.1]
     remove_column :orders, :product, :string
   end
 end
-
