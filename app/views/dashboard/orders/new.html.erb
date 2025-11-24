@@ -19,8 +19,6 @@
 <h2>注文情報</h2>
 <%= form_with model: [:dashboard, @order], local: true do |form| %>
   <%= form.hidden_field :reservation_id %>
-  <%= form.hidden_field :email %>
-  <%= form.hidden_field :name %>
 
   <div class="field">
     <%= form.label :item_id, "購入商品" %>
@@ -35,7 +33,7 @@
   <h3>カード情報</h3>
   <div class="field">
     <%= form.label :card_number, "カード番号" %>
-    <%= form.text_field :card_number %>
+    <input type="text" id="order_card_number" />
     <small>※クレカ情報非通過の実装を模したもので、何の値を入力しても適当な乱数をサーバーにリクエストします。</small>
   </div>
 
