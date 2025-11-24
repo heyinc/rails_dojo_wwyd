@@ -1,5 +1,11 @@
 <h1>注文作成</h1>
 
+<% if flash[:alert].present? %>
+  <div class="error-messages">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
 <h2>予約情報</h2>
 <div class="reservation-info">
   <dl>
@@ -17,7 +23,7 @@
 </div>
 
 <h2>注文情報</h2>
-<%= form_with model: [:dashboard, @order], local: true do |form| %>
+<%= form_with model: [:dashboard, @order], data: { turbo: false } do |form| %>
   <%= form.hidden_field :reservation_id %>
 
   <div class="field">

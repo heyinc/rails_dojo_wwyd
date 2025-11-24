@@ -6,6 +6,12 @@
   </div>
 <% end %>
 
+<% if flash[:notice] %>
+  <div class="success-messages">
+    <p><%= flash[:notice] %></p>
+  </div>
+<% end %>
+
 <%= form_with model: @reservation, data: { turbo: false } do |form| %>
   <div class="field">
     <%= form.label :email, "メールアドレス" %>

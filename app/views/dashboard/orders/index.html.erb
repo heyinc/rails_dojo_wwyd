@@ -1,5 +1,11 @@
 <h1>注文一覧</h1>
 
+<% if flash[:notice].present? %>
+  <div class="success-messages">
+    <p><%= flash[:notice] %></p>
+  </div>
+<% end %>
+
 <% if @orders.any? %>
   <table>
     <thead>
