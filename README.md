@@ -15,13 +15,37 @@ STORES Tech Conf 2025 "What would You Do?" で行われるワークショップ�
 - 60分を経過したらその時点での実装をPull Requestとして本体のリポジトリに投げてください
 - 残り時間で各自の実装を眺めて感想を伝えたり、自分の実装を改善したり、参加者同士で議論するなど、自由に過ごしてください
 
+## 必要な環境
+
+このプロジェクトには以下の環境が必要です：
+
+- **Ruby 3.4.5** （.ruby-version で指定されています）
+
+### Ruby のバージョン管理について
+
+プロジェクトのルートディレクトリに `.ruby-version` ファイルがあるため、以下のような Ruby バージョン管理ツールを使用することをお勧めします：
+
+- [mise](https://mise.jdx.dev/) (推奨)
+- [rbenv](https://github.com/rbenv/rbenv)
+- [asdf](https://asdf-vm.com/)
+- [RVM](https://rvm.io/)
+
+> **注意**: macOS や Linux にプリインストールされている Ruby は通常古いバージョンのため、このプロジェクトでは動作しません。
+
 ## 環境構築
 
 ```bash
 git clone <repository-url>
 cd rails_dojo_wwyd
 
-./bin/setup --skip-server
+# Ruby バージョンが正しいことを確認
+ruby -v  # Ruby 3.4.5 であることを確認
+
+bundle install
+
+./bin/rails db:migrate
+./bin/rails db:seed
+
 ./bin/rails server
 ```
 
