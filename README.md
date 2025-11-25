@@ -43,9 +43,7 @@ ruby -v  # Ruby 3.4.5 であることを確認
 
 bundle install
 
-./bin/rails db:migrate
-./bin/rails db:seed
-
+./bin/setup --skip-server 
 ./bin/rails server
 ```
 
