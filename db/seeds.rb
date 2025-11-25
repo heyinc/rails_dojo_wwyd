@@ -28,7 +28,7 @@ items = [
   { name: "商品B", stock: 5, price: 2000 },
   { name: "商品C", stock: 20, price: 1500 },
   { name: "商品D", stock: 15, price: 3000 },
-  { name: "商品E", stock: 8, price: 2500 }
+  { name: "在庫なし商品", stock: 0, price: 2500 }
 ]
 
 items.each do |item_data|

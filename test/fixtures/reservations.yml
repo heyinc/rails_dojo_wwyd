@@ -1,17 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+<% future_date = Date.current + 1.day %>
+
 one:
-  email: MyString
-  name: MyString
-  date: 2025-10-28
-  time: 2025-10-28 11:48:56
-  preferred_staff: MyString
+  email: reservation1@example.com
+  name: Reservation One
+  date: <%= future_date %>
+  time: <%= Time.current.change(hour: 14, min: 0) %>
+  preferred_staff:
   purchase_intention: false
+  status: pending
 
 two:
-  email: MyString
-  name: MyString
-  date: 2025-10-28
-  time: 2025-10-28 11:48:56
-  preferred_staff: MyString
-  purchase_intention: false
+  email: reservation2@example.com
+  name: Reservation Two
+  date: <%= future_date + 1.day %>
+  time: <%= Time.current.change(hour: 15, min: 0) %>
+  preferred_staff:
+  purchase_intention: true
+  status: pending

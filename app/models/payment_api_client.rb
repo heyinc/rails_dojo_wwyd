@@ -5,7 +5,10 @@ class PaymentApiClient
     # @param amount [Integer] 決済金額
     # @return [Hash] 決済結果 { payment_id: String, amount: Integer }
     def execute(token:, amount:)
-      raise "token is required" if token.blank?
+      raise ArgumentError, "token is required" if token.blank?
+
+      # APIコールなので時折タイムアウトが発生します
+      raise Timeout::Error, "Payment API request timed out" if rand(100000) == 0
 
       {
         payment_id: generate_payment_id,

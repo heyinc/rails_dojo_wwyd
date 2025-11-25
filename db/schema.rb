@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_05_130000) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_05_140000) do
   create_table "items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -24,7 +24,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_05_130000) do
     t.string "email"
     t.integer "item_id", null: false
     t.string "name"
-    t.string "product"
     t.integer "reservation_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
