@@ -19,11 +19,31 @@
 - 注文情報の作成
 - 決済処理の実行
 
+## 必要な環境
+
+このプロジェクトには以下の環境が必要です：
+
+- **Ruby 3.4.5** （.ruby-version で指定されています）
+
+### Ruby のバージョン管理について
+
+プロジェクトのルートディレクトリに `.ruby-version` ファイルがあるため、以下のような Ruby バージョン管理ツールを使用することをお勧めします：
+
+- [mise](https://mise.jdx.dev/) (推奨)
+- [rbenv](https://github.com/rbenv/rbenv)
+- [asdf](https://asdf-vm.com/)
+- [RVM](https://rvm.io/)
+
+> **注意**: macOS や Linux にプリインストールされている Ruby は通常古いバージョンのため、このプロジェクトでは動作しません。
+
 ## 環境構築
 
 ```bash
 git clone <repository-url>
 cd rails_dojo_wwyd
+
+# Ruby バージョンが正しいことを確認
+ruby -v  # Ruby 3.4.5 であることを確認
 
 bundle install
 
