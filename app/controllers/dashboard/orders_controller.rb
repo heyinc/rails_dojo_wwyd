@@ -39,39 +39,39 @@ class Dashboard::OrdersController < ApplicationController
       item: item,
     )
 
-
-    if order.save
-      begin
-        payment_api_client = PaymentApiClient.execute(
-          token: params[:order][:token],
-          amount: item.price
-        )
-        payment = Payment.new(
-          amount: payment_api_client[:amount],
-          payment_id: payment_api_client[:payment_id],
-          order: order,
-        )
-      rescue Timeout::Error
-        flash.alert = order.errors.full_messages.join(", ")
-        redirect_to new_dashboard_order_path(reservation_id: reservation.id)
-        return
-      end
-
-      if payment.save
-        reservation.update!(status: "completed")
-        item.decrement!(:stock)
-        redirect_to dashboard_orders_path, notice: "注文が作成されました"
-        return
-      else
-        # TODO
-      end
-      redirect_to dashboard_orders_path, notice: "注文が作成されました"
-    else
+    unless order.save
       @order = order
       @items = Item.all.order(:name)
       @users = User.all.order(:name)
       flash.alert = order.errors.full_messages.join(", ")
       redirect_to new_dashboard_order_path(reservation_id: reservation.id)
+      return
     end
+
+    begin
+      payment_api_client = PaymentApiClient.execute(
+        token: params[:order][:token],
+        amount: item.price
+      )
+      payment = Payment.new(
+        amount: payment_api_client[:amount],
+        payment_id: payment_api_client[:payment_id],
+        order: order,
+      )
+    rescue Timeout::Error
+      flash.alert = order.errors.full_messages.join(", ")
+      redirect_to new_dashboard_order_path(reservation_id: reservation.id)
+      return
+    end
+
+    if payment.save
+      reservation.update!(status: "completed")
+      item.decrement!(:stock)
+      redirect_to dashboard_orders_path, notice: "注文が作成されました"
+      return
+    else
+      # TODO
+    end
+    redirect_to dashboard_orders_path, notice: "注文が作成されました"
   end
 end
