@@ -1,9 +1,36 @@
 # マスタリーのためのRails道場 "What Would You Do?"
 
+https://storesinc.tech/conf/2025
+
+STORES Tech Conf 2025 "What would You Do?" で行われるワークショップ「マスタリーのためのRails道場」用のリポジトリです。
+
 ## 概要
 
 このRailsアプリケーションは、お店の来店予約管理と注文管理を行うシステムです。
-顧客はログイン不要で予約でき、従業員はログインして予約管理・注文処理・決済を行えます。
+このお店のお客さんはログインせずに来店予約ができ、従業員はログインして予約管理・注文処理・決済を行えます。
+
+## ワークショップの内容
+- 各自のGitHubアカウントにこのリポジトリをフォークしてください
+- 開始後60分間は環境構築ののち、アプリケーションの説明を読みながら課題に挑戦してください
+- 60分を経過したらその時点での実装をPull Requestとして本体のリポジトリに投げてください
+- 残り時間で各自の実装を眺めて感想を伝えたり、自分の実装を改善したり、参加者同士で議論するなど、自由に過ごしてください
+
+## 必要な環境
+
+このプロジェクトには以下の環境が必要です：
+
+- **Ruby 3.4.5** （.ruby-version で指定されています）
+
+### Ruby のバージョン管理について
+
+プロジェクトのルートディレクトリに `.ruby-version` ファイルがあるため、以下のような Ruby バージョン管理ツールを使用することをお勧めします：
+
+- [mise](https://mise.jdx.dev/) (推奨)
+- [rbenv](https://github.com/rbenv/rbenv)
+- [asdf](https://asdf-vm.com/)
+- [RVM](https://rvm.io/)
+
+> **注意**: macOS や Linux にプリインストールされている Ruby は通常古いバージョンのため、このプロジェクトでは動作しません。
 
 ## 環境構築
 
@@ -11,7 +38,12 @@
 git clone <repository-url>
 cd rails_dojo_wwyd
 
-./bin/setup --skip-server
+# Ruby バージョンが正しいことを確認
+ruby -v  # Ruby 3.4.5 であることを確認
+
+bundle install
+
+./bin/setup --skip-server 
 ./bin/rails server
 ```
 
@@ -32,10 +64,11 @@ http://127.0.0.1:3000/dashboard/reservations
 - 予約詳細ページから注文作成ページに遷移できます
 
 ### 注文作成・一覧
-http://localhost:3000/dashboard/orders
+http://127.0.0.1:3000/dashboard/orders
 
 - 予約情報を元に注文を作成できます
 - 注文の作成自体は課題1となっているのでまだ動作しません
+- 注文作成画面は予約詳細から遷移できます
 
 ## 課題
 
@@ -45,19 +78,21 @@ http://localhost:3000/dashboard/orders
 
 - [ ] Orderレコードの作成
     - `Reservation has_one Order` の関係であることに注意してください
-    - `Order#email` には指定された `Reservation#email` を保持させてください
-    - `Order#name` には指定された `Item#name` を保持させてください
+    - `Order#email` にはリクエストパラメータで指定された `Reservation#email` の値を保存してください
+    - `Order#name` にはリクエストパラメータで指定された `Item#name` の値を保存してください
 - [ ] 決済APIクライアント（`PaymentApiClient.execute`）を呼び出し、Paymentレコードの作成
     - `Order has_one Payment` の関係であることに注意してください
-    - `PaymentApiClient.execute` の引数 `token` にはリクエストパラメータ `params[:order][:token]` を指定してください
-    - `PaymentApiClient.execute` の引数 `amount` には指定された商品の価格 `Item#price` を指定してください
+    - `PaymentApiClient.execute` の引数 `token` にはリクエストパラメータ `params[:order][:token]` の値を設定してください
+    - `PaymentApiClient.execute` の引数 `amount` にはリクエストパラメータで指定された商品の価格 `Item#price` の値を設定してください
 - [ ] 予約ステータス（`Reservation#status`）を `pending` から `completed` に更新
     - すでに `completed` である場合はエラーとしてください
 - [ ] 指定されたアイテムの在庫数（`Item#stock`）を1減らす
-    - 在庫が存在しなければエラーとしてください
+    - 在庫が1未満であればエラーとしてください
 - [ ] エラーが発生した場合はその情報を `flash.alert.now` に保持し、画面に表示できるようにする
 
-### 課題2: 自由課題
+正常系のみテストが用意されているので、参考にしてください。テストは `./bin/rails test` で実行できます。
+
+### 課題2: (任意)自由課題
 
 このアプリケーションをもっと良くするために、思いついた改善点があれば何でも取り組んでください。
 
@@ -66,6 +101,7 @@ http://localhost:3000/dashboard/orders
 - UserとItemはseedからのみ生成されます
 - 決済APIは `PaymentApiClient` クラスでダミー実装されています
     - 実際の決済処理は行われません
+    - Web APIのダミー実装なのでまれにタイムアウトすることまで模しています
 
 ## ログイン情報
 
