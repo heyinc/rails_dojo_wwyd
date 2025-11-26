@@ -111,6 +111,7 @@ GEM
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
+    fiddle (1.1.8)
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -365,6 +366,7 @@ DEPENDENCIES
   bundler-audit
   capybara
   debug
+  fiddle
   importmap-rails
   jbuilder
   propshaft
