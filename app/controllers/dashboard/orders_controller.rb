@@ -53,11 +53,6 @@ class Dashboard::OrdersController < ApplicationController
         token: params[:order][:token],
         amount: item.price
       )
-      payment = Payment.new(
-        amount: payment_api_client[:amount],
-        payment_id: payment_api_client[:payment_id],
-        order: order,
-      )
     rescue Timeout::Error
       # NOTE: 決済に失敗した場合に……
       #   * Orderも削除すべき？
@@ -67,13 +62,26 @@ class Dashboard::OrdersController < ApplicationController
       return
     end
 
-    if payment.save
+    payment = Payment.new(
+      amount: payment_api_client[:amount],
+      payment_id: payment_api_client[:payment_id],
+      order: order,
+    )
+
+    ApplicationRecord.transaction do
+      payment.save!
       reservation.update!(status: "completed")
       item.decrement!(:stock)
+    end
+
+    if payment.persisted?
       redirect_to dashboard_orders_path, notice: "注文が作成されました"
       return
     else
       # TODO
+      flash.alert = "なんらかの理由で決済に失敗しました"
+      redirect_to new_dashboard_order_path(reservation_id: reservation.id)
+      return
     end
     redirect_to dashboard_orders_path, notice: "注文が作成されました"
   end
