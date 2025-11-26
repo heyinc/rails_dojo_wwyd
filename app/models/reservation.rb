@@ -11,6 +11,15 @@ class Reservation < ApplicationRecord
 
   validate :date_must_be_future
 
+  class AlreadyCompleted < StandardError
+  end
+
+  def complete!
+    raise AlreadyCompleted if completed?
+
+    update!(status: "completed")
+  end
+
   private
 
   def date_must_be_future

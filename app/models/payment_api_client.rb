@@ -1,5 +1,8 @@
 # このクラスが決済APIを実行するクラスだと思って使ってください
 class PaymentApiClient
+  class Timeout < ::Timeout::Error
+  end
+
   class << self
     # @param token [String] トークン
     # @param amount [Integer] 決済金額
@@ -8,12 +11,12 @@ class PaymentApiClient
       raise ArgumentError, "token is required" if token.blank?
 
       # APIコールなので時折タイムアウトが発生します
-      raise Timeout::Error, "Payment API request timed out" if rand(100000) == 0
+      raise Timeout, "Payment API request timed out" if rand(100000) == 0
 
-      {
+      Payment.build(
         payment_id: generate_payment_id,
         amount: amount.to_i
-      }
+      )
     end
 
     private
