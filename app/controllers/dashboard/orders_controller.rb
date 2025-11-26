@@ -59,7 +59,10 @@ class Dashboard::OrdersController < ApplicationController
         order: order,
       )
     rescue Timeout::Error
-      flash.alert = order.errors.full_messages.join(", ")
+      # NOTE: 決済に失敗した場合に……
+      #   * Orderも削除すべき？
+      #   * item.stockは減らすべき？(注文のみ保存して決済は後でやり直す？)
+      flash.alert = "決済処理がタイムアウトしました"
       redirect_to new_dashboard_order_path(reservation_id: reservation.id)
       return
     end
