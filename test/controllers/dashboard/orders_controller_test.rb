@@ -14,7 +14,7 @@ class Dashboard::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get create" do
+  test "注文が作成できる" do
     reservation = reservations(:one)
     item = items(:one)
     user = users(:one)
@@ -52,5 +52,51 @@ class Dashboard::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     item.reload
     assert_equal initial_stock - 1, item.stock
+  end
+
+  test "ストックがない商品の注文はできない" do
+    reservation = reservations(:one)
+    item = items(:no_stock)
+    user = users(:one)
+    token = SecureRandom.alphanumeric(32)
+
+    post dashboard_orders_path, params: {
+      order: {
+        reservation_id: reservation.id,
+        item_id: item.id,
+        user_id: user.id,
+        token: token
+      }
+    }
+
+    assert_equal "商品の在庫が不足しています", flash[:alert]
+
+    assert_equal 0, Order.count
+
+    reservation.reload
+    assert_equal "pending", reservation.status
+
+    item.reload
+    assert_equal 0, item.stock
+  end
+
+  test "既に確定した予約で注文はできない" do
+    reservation = reservations(:completed)
+    item = items(:one)
+    user = users(:one)
+    token = SecureRandom.alphanumeric(32)
+
+    post dashboard_orders_path, params: {
+      order: {
+        reservation_id: reservation.id,
+        item_id: item.id,
+        user_id: user.id,
+        token: token
+      }
+    }
+
+    assert_equal "既に確定された予約です", flash[:alert]
+
+    assert_equal 0, Order.count
   end
 end

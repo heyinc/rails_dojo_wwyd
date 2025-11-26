@@ -38,15 +38,15 @@ class Dashboard::OrdersController < ApplicationController
     redirect_to dashboard_orders_path
   rescue Reservation::AlreadyCompleted
     # TODO: new_dashboard_orders_path を表示したい
-    flash.notice = "既に確定された予約です"
+    flash.alert = "既に確定された予約です"
     redirect_to dashboard_orders_path
   rescue Item::LackOfStock
     # TODO: new_dashboard_orders_path を表示したい
-    flash.notice = "商品の在庫が不足しています"
+    flash.alert = "商品の在庫が不足しています"
     redirect_to dashboard_orders_path
   rescue PaymentApiClient::Timeout
     # TODO: new_dashboard_orders_path を表示したい
-    flash.notice = "決済がタイムアウトしました"
+    flash.alert = "決済がタイムアウトしました"
     redirect_to dashboard_orders_path
   end
 end

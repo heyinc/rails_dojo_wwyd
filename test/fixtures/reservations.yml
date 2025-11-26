@@ -19,3 +19,12 @@ two:
   preferred_staff:
   purchase_intention: true
   status: pending
+
+completed:
+  email: reservation+completed@example.com
+  name: Reservation Completed
+  date: <%= future_date + 2.day %>
+  time: <%= Time.current.change(hour: 12, min: 0) %>
+  preferred_staff:
+  purchase_intention: true
+  status: completed
