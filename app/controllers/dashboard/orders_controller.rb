@@ -23,6 +23,7 @@ class Dashboard::OrdersController < ApplicationController
       redirect_to dashboard_orders_path, notice: '注文が作成されました'
     else
       new_resources_setup
+      # TODO: 画面でいい感じに表示されるようにする
       flash.alert.now = @order.errors.full_messages
       render :new, status: :unprocessable_entity
     end
