@@ -16,6 +16,34 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
+    service = OrderCreationService.new(
+      order_params: order_params,
+      token: params[:order][:token]
+    )
+
+    begin
+      @order = service.call
+      redirect_to dashboard_orders_path, notice: "注文が作成されました"
+    rescue OrderCreationService::ReservationAlreadyCompletedError => e
+      flash[:alert] = e.message
+      redirect_to dashboard_orders_path
+    rescue OrderCreationService::InsufficientStockError => e
+      @order = Order.new(order_params)
+      @order.name = Item.find(params[:order][:item_id]).name
+      flash.now[:alert] = e.message
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      render :new
+    rescue ActiveRecord::RecordInvalid
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      render :new
+    end
+  end
+
+  private
+
+  def order_params
+    params.require(:order).permit(:reservation_id, :user_id, :item_id, :email)
   end
 end
