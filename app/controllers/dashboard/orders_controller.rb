@@ -16,17 +16,30 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(order_params)
+    reservation = Reservation.find(params[:order][:reservation_id])
+    item = Item.find(params[:order][:item_id])
 
-    if @order.reservation.status == :completed
-      flash.now.alert = "すでに作成済み"
+    if reservation.completed?
+      flash[:alert] = "この予約はすでに処理済みです。"
+      return redirect_to dashboard_orders_path
+    end
+
+    if item.stock < 1
+      @order = Order.new(order_params)
+      @order.name = item.name
+      flash.now[:alert] = "在庫が不足しています。"
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
       return render :new
     end
+
+    @order = Order.new(order_params)
+    @order.name = item.name
 
     if @order.save
       # 決済APIを実行
       token = params[:order][:token]
-      amount = @order.item.price
+      amount = item.price
       payment_result = PaymentApiClient.execute(token: token, amount: amount)
 
       # Paymentレコードを作成
@@ -35,7 +48,10 @@ class Dashboard::OrdersController < ApplicationController
         amount: payment_result[:amount]
       )
 
-      @order.reservation.update(status: :completed)
+      reservation.update(status: :completed)
+
+      # 在庫数を1減らす
+      item.decrement!(:stock)
 
       redirect_to dashboard_orders_path, notice: "注文が作成されました"
     else
@@ -48,6 +64,6 @@ class Dashboard::OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:reservation_id, :user_id, :item_id, :email, :name)
+    params.require(:order).permit(:reservation_id, :user_id, :item_id, :email)
   end
 end
