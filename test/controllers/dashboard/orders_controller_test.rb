@@ -26,6 +26,7 @@ class Dashboard::OrdersControllerTest < ActionDispatch::IntegrationTest
         reservation_id: reservation.id,
         item_id: item.id,
         user_id: user.id,
+        email: reservation.email,
         token: token
       }
     }
@@ -52,5 +53,100 @@ class Dashboard::OrdersControllerTest < ActionDispatch::IntegrationTest
 
     item.reload
     assert_equal initial_stock - 1, item.stock
+  end
+
+  test "should not create order when reservation status is already completed" do
+    reservation = reservations(:one)
+    reservation.update!(status: "completed")
+    item = items(:one)
+    user = users(:one)
+    token = SecureRandom.alphanumeric(32)
+
+    assert_no_difference("Order.count") do
+      post dashboard_orders_path, params: {
+        order: {
+          reservation_id: reservation.id,
+          item_id: item.id,
+          user_id: user.id,
+          email: reservation.email,
+          name: reservation.name,
+          token: token
+        }
+      }
+    end
+
+    assert_redirected_to dashboard_orders_path
+    assert_equal "この予約はすでに処理済みです。", flash[:alert]
+  end
+
+  test "should update reservation status from pending to completed on successful order creation" do
+    reservation = reservations(:one)
+    reservation.update!(status: "pending")
+    item = items(:one)
+    user = users(:one)
+    token = SecureRandom.alphanumeric(32)
+
+    assert_equal "pending", reservation.status
+
+    post dashboard_orders_path, params: {
+      order: {
+        reservation_id: reservation.id,
+        item_id: item.id,
+        user_id: user.id,
+        email: reservation.email,
+        token: token
+      }
+    }
+
+    reservation.reload
+    assert_equal "completed", reservation.status
+  end
+
+  test "should decrease item stock by 1 on successful order creation" do
+    reservation = reservations(:one)
+    item = items(:one)
+    user = users(:one)
+    initial_stock = item.stock
+    token = SecureRandom.alphanumeric(32)
+
+    post dashboard_orders_path, params: {
+      order: {
+        reservation_id: reservation.id,
+        item_id: item.id,
+        user_id: user.id,
+        email: reservation.email,
+        token: token
+      }
+    }
+
+    item.reload
+    assert_equal initial_stock - 1, item.stock
+  end
+
+  test "should not create order when item stock is less than 1" do
+    reservation = reservations(:one)
+    item = items(:one)
+    item.update!(stock: 0)
+    user = users(:one)
+    token = SecureRandom.alphanumeric(32)
+
+    assert_no_difference("Order.count") do
+      post dashboard_orders_path, params: {
+        order: {
+          reservation_id: reservation.id,
+          item_id: item.id,
+          user_id: user.id,
+          email: reservation.email,
+          name: reservation.name,
+          token: token
+        }
+      }
+    end
+
+    assert_response :success
+    assert_equal "在庫が不足しています。", flash[:alert]
+
+    item.reload
+    assert_equal 0, item.stock
   end
 end

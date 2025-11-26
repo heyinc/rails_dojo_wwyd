@@ -18,6 +18,11 @@ class Dashboard::OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
 
+    if @order.reservation.status == :completed
+      flash.now.alert = "すでに作成済み"
+      return render :new
+    end
+
     if @order.save
       # 決済APIを実行
       token = params[:order][:token]
@@ -30,7 +35,9 @@ class Dashboard::OrdersController < ApplicationController
         amount: payment_result[:amount]
       )
 
-      redirect_to dashboard_orders_path, notice: '注文が作成されました。'
+      @order.reservation.update(status: :completed)
+
+      redirect_to dashboard_orders_path, notice: "注文が作成されました"
     else
       @items = Item.all.order(:name)
       @users = User.all.order(:name)

@@ -26,7 +26,6 @@
 <%= form_with model: [:dashboard, @order], data: { turbo: false } do |form| %>
   <%= form.hidden_field :reservation_id %>
   <%= form.hidden_field :email %>
-  <%= form.hidden_field :name %>
 
   <div class="field">
     <%= form.label :item_id, "購入商品" %>
