@@ -21,7 +21,7 @@ class Dashboard::OrdersController < ApplicationController
     @order.assign_attributes(order_params)
 
     if @order.save
-      redirect_to dashboard_orders_path, notice: "Order was successfully created."
+      redirect_to dashboard_orders_path, notice: "注文が作成されました"
     else
       @items = Item.all.order(:name)
       @users = User.all.order(:name)
@@ -32,6 +32,6 @@ class Dashboard::OrdersController < ApplicationController
   private
 
   def order_params
-    params.expect(order: %i[email name item_id user_id token])
+    params.expect(order: %i[item_id user_id token])
   end
 end
