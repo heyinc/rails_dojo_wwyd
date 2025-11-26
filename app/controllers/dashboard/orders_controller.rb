@@ -36,25 +36,29 @@ class Dashboard::OrdersController < ApplicationController
     @order = Order.new(order_params)
     @order.name = item.name
 
-    if @order.save
-      # 決済APIを実行
-      token = params[:order][:token]
-      amount = item.price
-      payment_result = PaymentApiClient.execute(token: token, amount: amount)
+    begin
+      Order.transaction do
+        @order.save!
 
-      # Paymentレコードを作成
-      @order.create_payment!(
-        payment_id: payment_result[:payment_id],
-        amount: payment_result[:amount]
-      )
+        # 決済APIを実行
+        token = params[:order][:token]
+        amount = item.price
+        payment_result = PaymentApiClient.execute(token: token, amount: amount)
 
-      reservation.update(status: :completed)
+        # Paymentレコードを作成
+        @order.create_payment!(
+          payment_id: payment_result[:payment_id],
+          amount: payment_result[:amount]
+        )
 
-      # 在庫数を1減らす
-      item.decrement!(:stock)
+        reservation.update!(status: :completed)
+
+        # 在庫数を1減らす
+        item.decrement!(:stock)
+      end
 
       redirect_to dashboard_orders_path, notice: "注文が作成されました"
-    else
+    rescue ActiveRecord::RecordInvalid
       @items = Item.all.order(:name)
       @users = User.all.order(:name)
       render :new
