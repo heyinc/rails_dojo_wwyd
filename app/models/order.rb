@@ -6,4 +6,9 @@ class Order < ApplicationRecord
 
   validates :email, presence: true
   validates :name, presence: true
+
+  before_validation do
+    self.email = reservation&.email
+    self.name = item&.name
+  end
 end

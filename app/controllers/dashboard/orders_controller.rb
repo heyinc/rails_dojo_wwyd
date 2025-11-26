@@ -1,4 +1,6 @@
 class Dashboard::OrdersController < ApplicationController
+  include OrderInputHandler
+
   def index
     @orders = Order.includes(:item, :reservation, :user).order(created_at: :desc)
   end
@@ -16,6 +18,19 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
+    order, payment = build_order_and_payment
+
+    ActiveRecord::Base.transaction do
+      payment.pay!(token:) &&
+        order.save! &&
+        order.reservation.completed! &&
+        order.item.decrease_stock
+    end
+
+    redirect_to dashboard_orders_path, notice: "注文が作成されました"
   end
+
+  private
+
+  def token = params.dig(:order, :token)
 end
