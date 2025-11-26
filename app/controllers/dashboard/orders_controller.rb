@@ -16,6 +16,20 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
+    @order = Order.new(order_params)
+
+    if @order.save
+      redirect_to dashboard_orders_path, notice: '注文が作成されました。'
+    else
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      render :new
+    end
+  end
+
+  private
+
+  def order_params
+    params.require(:order).permit(:reservation_id, :user_id, :item_id, :email, :name)
   end
 end
