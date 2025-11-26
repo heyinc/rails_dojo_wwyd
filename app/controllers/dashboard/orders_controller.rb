@@ -19,6 +19,17 @@ class Dashboard::OrdersController < ApplicationController
     @order = Order.new(order_params)
 
     if @order.save
+      # 決済APIを実行
+      token = params[:order][:token]
+      amount = @order.item.price
+      payment_result = PaymentApiClient.execute(token: token, amount: amount)
+
+      # Paymentレコードを作成
+      @order.create_payment!(
+        payment_id: payment_result[:payment_id],
+        amount: payment_result[:amount]
+      )
+
       redirect_to dashboard_orders_path, notice: '注文が作成されました。'
     else
       @items = Item.all.order(:name)
