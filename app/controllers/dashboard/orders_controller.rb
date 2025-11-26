@@ -11,11 +11,34 @@ class Dashboard::OrdersController < ApplicationController
       name: reservation.name,
       user: Current.user
     )
+    new_resources_setup
+  end
+
+  def create
+    reservation = Reservation.find(params.dig(:order, :reservation_id))
+    item = Item.find(params.dig(:order, :item_id))
+    @order = Order.new(order_params(reservation, item))
+
+    if @order.save
+      redirect_to dashboard_orders_path, notice: '注文が作成されました'
+    else
+      new_resources_setup
+      # TODO: 画面でいい感じに表示されるようにする
+      flash.alert.now = @order.errors.full_messages
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def new_resources_setup
     @items = Item.all.order(:name)
     @users = User.all.order(:name)
   end
 
-  def create
-    # Write Code Here
+  def order_params(reservation, item)
+    params.require(:order)
+      .permit(:reservation_id, :user_id, :item_id, :email, :name, :item_id)
+      .merge(name: item.name, email: reservation.email)
   end
 end
