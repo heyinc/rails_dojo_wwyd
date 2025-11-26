@@ -16,6 +16,23 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    # Write Code Here
+    reservation = Reservation.find(params[:order][:reservation_id])
+    item = Item.find(params[:order][:item_id])
+    order = Order.new(
+      reservation: reservation,
+      email: reservation.email,
+      name: item.name,
+      user: Current.user,
+      item: item,
+    )
+    if order.save
+      redirect_to dashboard_orders_path, notice: "注文が作成されました"
+    else
+      @order = order
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      flash.now.alert = order.errors.full_messages.join(", ")
+      render :new
+    end
   end
 end
