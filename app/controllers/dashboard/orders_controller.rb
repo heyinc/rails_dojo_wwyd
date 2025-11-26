@@ -16,48 +16,24 @@ class Dashboard::OrdersController < ApplicationController
   end
 
   def create
-    reservation = Reservation.find(params[:order][:reservation_id])
-    item = Item.find(params[:order][:item_id])
-
-    if reservation.completed?
-      flash[:alert] = "この予約はすでに処理済みです。"
-      return redirect_to dashboard_orders_path
-    end
-
-    if item.stock < 1
-      @order = Order.new(order_params)
-      @order.name = item.name
-      flash.now[:alert] = "在庫が不足しています。"
-      @items = Item.all.order(:name)
-      @users = User.all.order(:name)
-      return render :new
-    end
-
-    @order = Order.new(order_params)
-    @order.name = item.name
+    service = OrderCreationService.new(
+      order_params: order_params,
+      token: params[:order][:token]
+    )
 
     begin
-      Order.transaction do
-        @order.save!
-
-        # 決済APIを実行
-        token = params[:order][:token]
-        amount = item.price
-        payment_result = PaymentApiClient.execute(token: token, amount: amount)
-
-        # Paymentレコードを作成
-        @order.create_payment!(
-          payment_id: payment_result[:payment_id],
-          amount: payment_result[:amount]
-        )
-
-        reservation.update!(status: :completed)
-
-        # 在庫数を1減らす
-        item.decrement!(:stock)
-      end
-
+      @order = service.call
       redirect_to dashboard_orders_path, notice: "注文が作成されました"
+    rescue OrderCreationService::ReservationAlreadyCompletedError => e
+      flash[:alert] = e.message
+      redirect_to dashboard_orders_path
+    rescue OrderCreationService::InsufficientStockError => e
+      @order = Order.new(order_params)
+      @order.name = Item.find(params[:order][:item_id]).name
+      flash.now[:alert] = e.message
+      @items = Item.all.order(:name)
+      @users = User.all.order(:name)
+      render :new
     rescue ActiveRecord::RecordInvalid
       @items = Item.all.order(:name)
       @users = User.all.order(:name)
