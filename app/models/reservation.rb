@@ -11,13 +11,23 @@ class Reservation < ApplicationRecord
 
   validate :date_must_be_future
 
-  private
+  class AlreadyCompletedError < StandardError; end
 
-  def date_must_be_future
-    return unless date.present?
+  def mark_as_completed!
+    with_lock do
+      raise AlreadyCompletedError if completed?
 
-    if date < Date.current
-      errors.add(:date, "は今日以降の日付を選択してください")
+      completed!
     end
   end
+
+  private
+
+    def date_must_be_future
+      return unless date.present?
+
+      if date < Date.current
+        errors.add(:date, "は今日以降の日付を選択してください")
+      end
+    end
 end
