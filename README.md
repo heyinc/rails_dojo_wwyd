@@ -47,6 +47,15 @@ bundle install
 ./bin/rails server
 ```
 
+> **Windows ユーザーへの注意**:
+> 上記の `./bin/setup` や `./bin/rails` といったコマンドは、WindowsのコマンドプロンプトやPowerShellでは直接実行できません。
+> 以下のように `ruby` コマンドを先頭に付けて実行してください。
+>
+> ```bash
+> ruby bin/setup --skip-server
+> ruby bin/rails server
+> ```
+
 ## アプリケーションの説明（動作確認方法）
 
 ### 来店予約機能
