@@ -9,3 +9,8 @@ two:
   name: Item Two
   stock: 5
   price: 2000
+
+out_of_stock:
+  name: Item Out of Stock
+  stock: 0
+  price: 1500
