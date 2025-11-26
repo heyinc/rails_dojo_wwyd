@@ -17,7 +17,9 @@ class ReservationsController < ApplicationController
     if @reservation.save
       redirect_to root_path, notice: "予約が完了しました。"
     else
-      redirect_to new_reservation_path, alert: @reservation.errors.full_messages.join(", ")
+      @users = User.all.order(:name)
+      flash.now.alert = @reservation.errors.full_messages.join(", ")
+      render :new
     end
   end
 
