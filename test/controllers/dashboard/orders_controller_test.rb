@@ -71,4 +71,30 @@ class Dashboard::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_dashboard_order_path(reservation_id: reservation.id)
     assert_equal "選択した商品は在庫切れです", flash[:alert]
   end
+
+  test "should not success to create multiple orders for the same reservation" do
+    reservation = reservations(:one)
+    item = items(:one)
+    user = users(:one)
+    Order.create!(
+      reservation: reservation,
+      email: reservation.email,
+      name: item.name,
+      item: item,
+      user: user,
+    )
+
+    token = SecureRandom.alphanumeric(32)
+    post dashboard_orders_path, params: {
+      order: {
+        reservation_id: reservation.id,
+        item_id: item.id,
+        user_id: user.id,
+        token: token
+      }
+    }
+
+    assert_redirected_to new_dashboard_order_path(reservation_id: reservation.id)
+    assert_equal "注文はすでに存在します", flash[:alert]
+  end
 end

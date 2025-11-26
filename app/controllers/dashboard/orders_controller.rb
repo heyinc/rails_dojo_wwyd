@@ -19,6 +19,12 @@ class Dashboard::OrdersController < ApplicationController
     reservation = Reservation.find(params[:order][:reservation_id])
     item = Item.find(params[:order][:item_id])
 
+    if reservation.order.present?
+      flash.alert = "注文はすでに存在します"
+      redirect_to new_dashboard_order_path(reservation_id: reservation.id)
+      return
+    end
+
     if item.stock <= 0
       flash.alert = "選択した商品は在庫切れです"
       redirect_to new_dashboard_order_path(reservation_id: reservation.id)
