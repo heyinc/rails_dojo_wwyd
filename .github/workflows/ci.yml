@@ -15,14 +15,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - uses: flatt-security/setup-takumi-guard-rubygems@v1
-        with:
-          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
+      - name: Bundle install
+        shell: bash
+        run: bundle install --jobs 4 --retry 3
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
@@ -38,14 +41,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - uses: flatt-security/setup-takumi-guard-rubygems@v1
-        with:
-          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
+      - name: Bundle install
+        shell: bash
+        run: bundle install --jobs 4 --retry 3
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -59,14 +65,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - uses: flatt-security/setup-takumi-guard-rubygems@v1
-        with:
-          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
+      - name: Bundle install
+        shell: bash
+        run: bundle install --jobs 4 --retry 3
       - name: Prepare RuboCop cache
         uses: actions/cache@v4
         env:
@@ -95,14 +104,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - uses: flatt-security/setup-takumi-guard-rubygems@v1
-        with:
-          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
+      - name: Bundle install
+        shell: bash
+        run: bundle install --jobs 4 --retry 3
       - name: Run tests
         env:
           RAILS_ENV: test
@@ -125,14 +137,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - uses: flatt-security/setup-takumi-guard-rubygems@v1
-        with:
-          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
+          bundler-cache: false
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
+      - name: Bundle install
+        shell: bash
+        run: bundle install --jobs 4 --retry 3
       - name: Run System Tests
         env:
           RAILS_ENV: test
