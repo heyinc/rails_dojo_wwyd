@@ -8,11 +8,16 @@ on:
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -20,17 +25,22 @@ jobs:
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
-      
+
       - name: Scan for known security vulnerabilities in gems used
         run: bin/bundler-audit
-      
+
   scan_js:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -41,12 +51,17 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -67,6 +82,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     # services:
     #  redis:
@@ -78,6 +95,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -92,6 +112,8 @@ jobs:
 
   system-test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     # services:
     #  redis:
@@ -103,6 +125,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - uses: flatt-security/setup-takumi-guard-rubygems@v1
+        with:
+          bot-id: "${{ vars.TAKUMI_GUARD_BOT_ID }}"
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
