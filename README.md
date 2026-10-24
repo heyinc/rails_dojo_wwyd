@@ -19,7 +19,7 @@ STORES Tech Conf 2025 "What would You Do?" で行われるワークショップ�
 
 このプロジェクトには以下の環境が必要です：
 
-- **Ruby 3.4.5** （.ruby-version で指定されています）
+- **Ruby 3.4.12** （.ruby-version で指定されています）
 
 ### Ruby のバージョン管理について
 
@@ -39,7 +39,7 @@ git clone <repository-url>
 cd rails_dojo_wwyd
 
 # Ruby バージョンが正しいことを確認
-ruby -v  # Ruby 3.4.5 であることを確認
+ruby -v  # Ruby 3.4.12 であることを確認
 
 bundle install
 
